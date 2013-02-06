@@ -16,7 +16,7 @@ $(document).ready(function()
       	html.data('previous-overflow', html.css('overflow'));
       	html.css('overflow', 'hidden');
       	window.scrollTo(scrollPosition[0], scrollPosition[1]);
-		
+
 		//Retrieve Images from Database
 		$.ajax({
 				url: 'res/scripts/getImage.php', 
@@ -62,7 +62,7 @@ $(document).ready(function()
 			    	$ImageArray = JSON.parse(result);
 			    	for(i=0; i<$ImageArray.length; i++)
 			    	{
-	                    document.getElementById("container").innerHTML += divImgContainer+divInfo+divDetails+$ImageArray[i].title+'</div><div class = "vote" id ="vote-'+i+'"></div></div>'+divImage+'<a href="'+$ImageArray[i].zoom +'"><img src="'+$ImageArray[i].thumb+'" /></a></div></div>';
+	                    document.getElementById("container").innerHTML += divImgContainer+divInfo+divDetails+$ImageArray[i].title+'</div><div id="voteCount">'+$ImageArray[i].vote+'</div><div class = "vote" id ="vote-'+i+'"></div></div>'+divImage+'<a href="'+$ImageArray[i].zoom +'"><img src="'+$ImageArray[i].thumb+'" /></a></div></div>';
 	                    ImageArrayComplete[ImageCounter] = $ImageArray[i].image;
 	                    UserArrayComplete[ImageCounter]  = $ImageArray[i].user;
 	                    ImageCounter++;
@@ -89,7 +89,7 @@ $(document).ready(function()
 				    	if($ImageArray[$ImageArray.length-1].EOF == "true") endOfFile = true;
 				    	for(i=0; i<$ImageArray.length; i++)
 			    		{
-	                    	document.getElementById("container").innerHTML += '<div id="imgContainer"><div id="info"><div id="details">'+$ImageArray[i].title+'</div><div class = "vote" id ="vote-'+i+'"></div></div><div id="image"><a href="'+$ImageArray[i].link +'"><img src="'+$ImageArray[i].thumb+'" /></a></div></div>';
+	                    	document.getElementById("container").innerHTML += divImgContainer+divInfo+divDetails+$ImageArray[i].title+'</div><div id="voteCount">'+$ImageArray[i].vote+'</div><div class = "vote" id ="vote-'+i+'"></div></div>'+divImage+'<a href="'+$ImageArray[i].zoom +'"><img src="'+$ImageArray[i].thumb+'" /></a></div></div>';
 	                    	ImageArrayComplete[ImageCounter] = $ImageArray[i].image;
 	                    	UserArrayComplete[ImageCounter]  = $ImageArray[i].user;
 	                    	ImageCounter++;

@@ -67,7 +67,7 @@ function RetrieveFromDB($ContestID, $ContestFolder, $ThumbName)
    
     mysql_select_db($mySqlTable, $con);
 
-    $sql = "SELECT  `IMGE_ID` ,  `USR_ID` ,  `IMGE_CPTION` FROM  `IMAGES` WHERE  `CNTST_ID` = $ContestID";
+    $sql    = "SELECT  `IMGE_ID` ,  `USR_ID` ,  `IMGE_CPTION` FROM  `IMAGES` WHERE  `CNTST_ID` = $ContestID";
     $result = mysql_query($sql);
 
     $JsonArray = array();
@@ -77,6 +77,7 @@ function RetrieveFromDB($ContestID, $ContestFolder, $ThumbName)
         $UserID         = $row['USR_ID'];
         $ImageCaption   = $row['IMGE_CPTION'];
 
+        
         $FullImagePath  = $ContestFolder.'/'.$ContestID.'/'.$UserID.'/'.$ImageID.'.jpg';
         $ThumbImagePath = $ContestFolder.'/'.$ContestID.'/'.$UserID.'/'.$ThumbName.$ImageID.'.jpg';
 
@@ -96,6 +97,7 @@ function RetrieveFromDB($ContestID, $ContestFolder, $ThumbName)
 //Retrieven data and convert to json array
 function RetrieveFromDBWithCount($ContestID, $ContestFolder, $ThumbName, $count)
 {
+    $TotalVotes = RetrieveVotesFromDB();
     require("config.php");
     $con = mysql_connect($mySqlServer, $mySqlUserName, $mySqlPass);
     if (!$con) die('Could not connect: ' . mysql_error());
@@ -113,17 +115,17 @@ function RetrieveFromDBWithCount($ContestID, $ContestFolder, $ThumbName, $count)
 
     $sql = "SELECT  `IMGE_ID` ,  `USR_ID` ,  `IMGE_CPTION` FROM  `IMAGES` WHERE  `CNTST_ID` = $ContestID LIMIT $count, $final";
     $result = mysql_query($sql);
-
+    
     $JsonArray = array();
     while($row = mysql_fetch_array($result))
     {
         $ImageID        = $row['IMGE_ID'];
         $UserID         = $row['USR_ID'];
         $ImageCaption   = $row['IMGE_CPTION'];
-
+        $VoteCount      = getVotes($ImageID, $TotalVotes);
         $FullImagePath  = $ContestFolder.'/'.$ContestID.'/'.$UserID.'/'.$ImageID.'.jpg';
         $ThumbImagePath = $ContestFolder.'/'.$ContestID.'/'.$UserID.'/'.$ThumbName.$ImageID.'.jpg';
-
+        
         $JsonFile       = array(
                                 "title" => $ImageCaption,
                                 "thumb" => $ThumbImagePath,
@@ -131,6 +133,7 @@ function RetrieveFromDBWithCount($ContestID, $ContestFolder, $ThumbName, $count)
                                 "zoom"  => $FullImagePath,
                                 "user"  => $UserID,
                                 "image" => $ImageID,
+                                "vote"  => $VoteCount,
                                 "EOF"   => $EOF
                             );
         array_push($JsonArray,$JsonFile);
@@ -179,5 +182,32 @@ function UpdateVoteDB($ImageID, $ImageOwnerID, $UserID)
     mysql_close($con);
     return true;
 
+}
+function RetrieveVotesFromDB()
+{
+    require("config.php");
+    $con = mysql_connect($mySqlServer, $mySqlUserName, $mySqlPass);
+    if (!$con) die('Could not connect: ' . mysql_error());
+   
+    mysql_select_db($mySqlTable, $con);
+
+    $sql = "SELECT  `IMAGE_ID` , COUNT( * ) AS  `VOTES` FROM VOTES GROUP BY  `IMAGE_ID`";
+    $result = mysql_query($sql);
+    $TotalVotes = array();
+    while($row = mysql_fetch_array($result))
+    {
+        array_push($TotalVotes, $row['IMAGE_ID'], $row['VOTES']);
+    }
+    mysql_close($con);
+    return($TotalVotes);
+}
+function getVotes($ImageID,$TotalVotes)
+{
+    for($i = 0; $i<count($TotalVotes); $i++)
+    {
+        if($TotalVotes[$i] == $ImageID)
+            return($TotalVotes[$i+1]);
+    }
+    return 0;
 }
 ?>
