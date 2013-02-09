@@ -39,7 +39,8 @@ $(document).ready(function()
 		var endOfFile = false;
 		var ImageCounter = 0;
 		var ImageArrayComplete = new Array();
-		var UserArrayComplete = new Array();
+		var UserArrayComplete  = new Array();
+		var ImageLinkArray     = new Array();
 		var divImgContainer =  '<div id="imgContainer">';
 		var divInfo 		= '<div id="info">';
 		var divDetails 		= '<div id="details">';
@@ -60,9 +61,11 @@ $(document).ready(function()
 			    success: function(result)
 			    {
 			    	$ImageArray = JSON.parse(result);
+			    	console.log($ImageArray[0].link);
 			    	for(i=0; i<$ImageArray.length; i++)
 			    	{
-	                    document.getElementById("container").innerHTML += divImgContainer+divInfo+divDetails+$ImageArray[i].title+'</div><div id="voteCount">'+$ImageArray[i].vote+'</div><div class = "vote" id ="vote-'+i+'"></div></div>'+divImage+'<a href="'+$ImageArray[i].zoom +'"><img src="'+$ImageArray[i].thumb+'" /></a></div></div>';
+			    		console.log(divImgContainer+divInfo+divDetails+$ImageArray[i].title+'</div><div id="voteCount">'+$ImageArray[i].vote+'</div><div class = "vote" id ="vote-'+i+'"></div></div>'+divImage+'<a href="'+$ImageArray[i].link +'"><img src="'+$ImageArray[i].thumb+'" /></a></div></div>');
+	                    document.getElementById("container").innerHTML += divImgContainer+'<div class ="info" id="info-'+i+'">'+divDetails+$ImageArray[i].title+'</div><div id="voteCount">'+$ImageArray[i].vote+'</div><div class = "vote" id ="vote-'+i+'"></div></div>'+divImage+'<a href="'+$ImageArray[i].link +'"><img src="'+$ImageArray[i].thumb+'" /></a></div></div>';
 	                    ImageArrayComplete[ImageCounter] = $ImageArray[i].image;
 	                    UserArrayComplete[ImageCounter]  = $ImageArray[i].user;
 	                    ImageCounter++;
@@ -89,7 +92,7 @@ $(document).ready(function()
 				    	if($ImageArray[$ImageArray.length-1].EOF == "true") endOfFile = true;
 				    	for(i=0; i<$ImageArray.length; i++)
 			    		{
-	                    	document.getElementById("container").innerHTML += divImgContainer+divInfo+divDetails+$ImageArray[i].title+'</div><div id="voteCount">'+$ImageArray[i].vote+'</div><div class = "vote" id ="vote-'+i+'"></div></div>'+divImage+'<a href="'+$ImageArray[i].zoom +'"><img src="'+$ImageArray[i].thumb+'" /></a></div></div>';
+	                    	document.getElementById("container").innerHTML += divImgContainer+divInfo+divDetails+$ImageArray[i].title+'</div><div id="voteCount">'+$ImageArray[i].vote+'</div><div class = "vote" id ="vote-'+i+'"></div></div>'+divImage+'<a href="'+$ImageArray[i].link +'"><img src="'+$ImageArray[i].thumb+'" /></a></div></div>';
 	                    	ImageArrayComplete[ImageCounter] = $ImageArray[i].image;
 	                    	UserArrayComplete[ImageCounter]  = $ImageArray[i].user;
 	                    	ImageCounter++;
@@ -119,5 +122,10 @@ $(document).ready(function()
 			    			alert(result);
 			    		}
 				});
+		});
+	$('#container').on('click', '.info', function(e){
+
+		alert(ImageArrayComplete[e.target.id.split("-")[1]]);
+
 		});
 });

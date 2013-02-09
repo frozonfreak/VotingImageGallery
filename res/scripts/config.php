@@ -2,6 +2,6 @@
 	$mySqlServer = "localhost";
 	$mySqlUserName = "root";
 	$mySqlPass = "";
-	$mySqlTable = "tablename";
+	$mySqlTable = "framez1";
 
 ?>
