@@ -61,10 +61,9 @@ $(document).ready(function()
 			    success: function(result)
 			    {
 			    	$ImageArray = JSON.parse(result);
-			    	console.log($ImageArray[0].link);
 			    	for(i=0; i<$ImageArray.length; i++)
 			    	{
-	                    document.getElementById("container").innerHTML += divImgContainer+divInfo+divDetails+$ImageArray[i].title+'</div><div id="voteCount">'+$ImageArray[i].vote+'</div><div class = "vote" id ="vote-'+i+'"></div></div>'+divImage+'<a href="'+$ImageArray[i].link +'"><img src="'+$ImageArray[i].thumb+'" /></a></div></div>';
+	                    document.getElementById("container").innerHTML += divImgContainer+divInfo+divDetails+$ImageArray[i].title+'</div><div id="voteCount">'+$ImageArray[i].vote+'</div><div class = "vote" id ="vote-'+i+'"></div></div>'+divImage+'<a href="'+$ImageArray[i].link+'"><img src="'+$ImageArray[i].thumb+'" /></a></div></div>';
 	                    ImageArrayComplete[ImageCounter] = $ImageArray[i].image;
 	                    UserArrayComplete[ImageCounter]  = $ImageArray[i].user;
 	                    ImageCounter++;
